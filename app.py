@@ -13,8 +13,8 @@ PERPLEXITY_API_KEY = "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"
 MODEL_NAME = "sonar-reasoning-pro"
 
 # ✅ Пути к файлам
-CAR_MODELS_FILE = "/Users/juliakriv/otzyvy/car_models.txt"
-OUTPUT_CSV = "/Users/juliakriv/otzyvy/car_reviews.csv"
+CAR_MODELS_FILE = "car_models.txt"
+OUTPUT_CSV = "car_reviews.csv"
 
 # ✅ Функция для генерации обзора (с 3 попытками)
 def generate_full_review(query):
@@ -40,7 +40,7 @@ def generate_full_review(query):
     attempts = 3  # Количество попыток
     for attempt in range(1, attempts + 1):
         try:
-            response = requests.post(url, headers=headers, json=payload, timeout=60)  # ⏳ Таймаут 60 секунд
+            response = requests.post(url, headers=headers, json=payload, timeout=60)
             if response.status_code == 200:
                 return response.json()["choices"][0]["message"]["content"]
             else:
@@ -50,7 +50,7 @@ def generate_full_review(query):
 
         time.sleep(5)  # ⏳ Задержка перед повторной попыткой
 
-    return f"Ошибка генерации обзора для {query} - API недоступен"  # Записываем в CSV
+    return f"Ошибка генерации обзора для {query} - API недоступен"
 
 # ✅ Функция очистки текста
 def clean_text(text):
@@ -108,6 +108,10 @@ def save_to_csv(reviews):
         # Добавляем новые обзоры
         for i, (title, text) in enumerate(reviews, start=last_id + 1):
             writer.writerow([i, datetime.datetime.now().strftime("%Y-%m-%d"), title, text])
+
+    # ✅ Гарантируем, что файл изменён для GitHub Actions
+    with open(OUTPUT_CSV, "a", encoding="utf-8") as f:
+        f.write("\n")
 
     print(f"✅ Файл обновлён: {OUTPUT_CSV}")
 
