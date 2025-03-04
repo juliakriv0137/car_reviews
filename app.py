@@ -16,42 +16,6 @@ MODEL_NAME = "sonar-reasoning-pro"
 CAR_MODELS_FILE = "car_models.txt"
 OUTPUT_CSV = "car_reviews.csv"
 
-# ✅ Функция для проверки и добавления заголовков в CSV
-def ensure_csv_headers():
-    headers = ["id", "date", "title", "review", "mark", "model"]
-    
-    file_exists = os.path.exists(OUTPUT_CSV)
-
-    # Проверяем, есть ли заголовки
-    if file_exists:
-        with open(OUTPUT_CSV, "r", encoding="utf-8") as file:
-            first_line = file.readline().strip()
-            if first_line == ",".join(headers):
-                return  # Заголовки уже есть, выходим
-
-    # Если файла нет или заголовков нет – создаём файл с заголовками
-    with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow(headers)
-        print("📌 Заголовки добавлены в CSV.")
-
-# ✅ Функция для получения последнего ID
-def get_last_id():
-    if not os.path.exists(OUTPUT_CSV):
-        return 0
-
-    with open(OUTPUT_CSV, "r", encoding="utf-8") as file:
-        reader = csv.reader(file)
-        rows = list(reader)
-
-    if len(rows) <= 1:
-        return 0  # Если нет данных, ID = 0
-
-    try:
-        return int(rows[-1][0])  # Последний ID
-    except ValueError:
-        return 0
-
 # ✅ Функция для генерации обзора (с 3 попытками)
 def generate_full_review(query):
     url = "https://api.perplexity.ai/chat/completions"
@@ -97,7 +61,7 @@ def clean_text(text):
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)  # Убираем размышления AI
     text = re.sub(r"\n{2,}", "\n\n", text)  # Убираем лишние пустые строки
     text = re.sub(r"SEO-ключи:.*$", "", text, flags=re.MULTILINE)  # Убираем блок "SEO-ключи"
-    text = re.sub(r"^#+\s*", "", text, flags=re.MULTILINE)  # Убираем заголовки ##
+    text = re.sub(r"## ", "", text)  # Убираем "##" из заголовков
     return text.strip()
 
 # ✅ Функция загрузки списка моделей
@@ -111,16 +75,39 @@ def load_car_models():
 
 # ✅ Функция сохранения обзоров в CSV (запись в реальном времени)
 def save_to_csv(title, review, mark, model):
-    ensure_csv_headers()  # Проверяем заголовки перед записью
-    last_id = get_last_id()
+    file_exists = os.path.exists(OUTPUT_CSV)
 
-    # **Форматируем текст**
-    formatted_review = review.replace("\n", " ")  # Убираем переносы строк
-    formatted_review = re.sub(r"\s+", " ", formatted_review).strip()  # Убираем лишние пробелы
+    # Проверяем, есть ли заголовки в файле
+    headers_needed = True
+    if file_exists:
+        with open(OUTPUT_CSV, "r", encoding="utf-8") as file:
+            first_line = file.readline().strip()
+            expected_headers = "id,date,title,review,mark,model"
+            if first_line == expected_headers:
+                headers_needed = False  # Заголовки уже есть
 
     with open(OUTPUT_CSV, "a", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file, quoting=csv.QUOTE_MINIMAL)
-        writer.writerow([last_id + 1, datetime.datetime.now().strftime("%Y-%m-%d"), title, formatted_review, mark, model])
+        writer = csv.writer(file)
+
+        # **Добавляем заголовки, если их нет**
+        if headers_needed:
+            writer.writerow(["id", "date", "title", "review", "mark", "model"])
+            print("📌 Заголовки добавлены в CSV.")
+
+        # **Определяем последний ID**
+        last_id = 0
+        if file_exists:
+            with open(OUTPUT_CSV, "r", encoding="utf-8") as existing_file:
+                reader = csv.reader(existing_file)
+                existing_reviews = list(reader)
+                if len(existing_reviews) > 1:
+                    try:
+                        last_id = int(existing_reviews[-1][0])
+                    except ValueError:
+                        last_id = 0
+
+        # **Записываем новую строку**
+        writer.writerow([last_id + 1, datetime.datetime.now().strftime("%Y-%m-%d"), title, review, mark, model])
 
     print(f"✅ [{mark} {model}] Данные записаны в {OUTPUT_CSV}")
 
