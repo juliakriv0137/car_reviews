@@ -35,7 +35,7 @@ def generate_full_review(query):
     }
 
     attempts = 3  # Количество попыток
-    for attempt in range(1, attempts + 1):
+    for attempt in range(1, attempts + 3):
         try:
             print(f"🔄 [{query}] Попытка {attempt}/{attempts} отправки запроса...")
             response = requests.post(url, headers=headers, json=payload, timeout=60)
@@ -61,11 +61,12 @@ def clean_text(text):
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)  # Убираем размышления AI
     text = re.sub(r"SEO-ключи:.*$", "", text, flags=re.MULTILINE)  # Убираем блок "SEO-ключи"
 
-    # Форматирование заголовков (заменяем "## Заголовок" на "=== Заголовок ===")
-    text = re.sub(r"##\s*(.*)", r"\n=== \1 ===\n", text)
-
-    # Оставляем логические разрывы строк
-    text = re.sub(r"\n{2,}", "\n\n", text)  # Двойные пустые строки для читабельности
+    # Убираем заголовочные символы (===, ##, ---)
+    text = re.sub(r"^(?:===|#)+\s*", "", text, flags=re.MULTILINE)  # Убираем === и ##
+    text = re.sub(r"^-{3,}", "", text, flags=re.MULTILINE)  # Убираем "---"
+    
+    # Логическое форматирование текста
+    text = re.sub(r"\n{2,}", "\n\n", text)  # Убираем лишние пустые строки
 
     return text.strip()
 
