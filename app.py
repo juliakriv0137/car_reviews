@@ -5,6 +5,7 @@ import csv
 import time
 import datetime
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ✅ API-ключ Perplexity AI
 PERPLEXITY_API_KEY = "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"
@@ -16,7 +17,10 @@ MODEL_NAME = "sonar-reasoning-pro"
 CAR_MODELS_FILE = "car_models.txt"
 OUTPUT_CSV = "car_reviews.csv"
 
-# ✅ Функция для генерации обзора (с 3 попытками)
+# ✅ Число потоков для параллельных запросов (оптимально 5)
+MAX_THREADS = 5
+
+# ✅ Функция для генерации обзора
 def generate_full_review(query):
     url = "https://api.perplexity.ai/chat/completions"
     headers = {
@@ -26,10 +30,10 @@ def generate_full_review(query):
     payload = {
         "model": MODEL_NAME,
         "messages": [
-            {"role": "system", "content": "Ты - автоэксперт"},
+            {"role": "system", "content": "Ты - автоэксперт."},
             {"role": "user", "content": f"Напиши все плюсы и минусы автомобиля {query} на основе отзывов пользователей в интернете."}
         ],
-        "max_tokens": 1500,
+        "max_tokens": 2000,
         "temperature": 0.5,
         "top_p": 0.9
     }
@@ -45,16 +49,17 @@ def generate_full_review(query):
         except requests.exceptions.RequestException as e:
             print(f"⚠ Попытка {attempt}/{attempts} - ошибка соединения с API: {e}")
 
-        time.sleep(5)  # ⏳ Задержка перед повторной попыткой
+        time.sleep(5)  # Задержка перед повторной попыткой
 
     return f"Ошибка генерации обзора для {query} - API недоступен"
 
 # ✅ Функция очистки текста
 def clean_text(text):
-    text = re.sub(r"\[\d+\]", "", text)  # Убираем ссылки типа [1], [2]
-    text = re.sub(r"\*\*", "", text)  # Убираем звездочки **
-    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)  # Убираем размышления AI
-    text = re.sub(r"\n{2,}", "\n\n", text)  # Убираем лишние пустые строки
+    text = re.sub(r"\[\d+\]", "", text)
+    text = re.sub(r"\*\*", "", text)
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)
+    text = re.sub(r"\n{2,}", "\n\n", text)
+    text = re.sub(r"SEO-ключи:.*$", "", text, flags=re.MULTILINE)
     return text.strip()
 
 # ✅ Функция загрузки списка моделей
@@ -64,7 +69,7 @@ def load_car_models():
         return []
     
     with open(CAR_MODELS_FILE, "r", encoding="utf-8") as file:
-        return [line.strip() for line in file.readlines() if line.strip()]
+        return [line.strip().split(" ", 1) for line in file.readlines() if line.strip()]
 
 # ✅ Проверка, нужно ли перезаписать CSV (раз в месяц)
 def should_reset_csv():
@@ -76,65 +81,61 @@ def should_reset_csv():
     
     return last_modified.month != current_date.month  # Если месяц изменился — перезаписываем файл
 
-# ✅ Функция сохранения обзоров в CSV
-def save_to_csv(review_data):
-    reset_csv = should_reset_csv()
+# ✅ Функция записи данных в CSV (в реальном времени)
+def save_review_to_csv(review_data):
+    file_exists = os.path.exists(OUTPUT_CSV)
 
     # Если новый месяц — перезаписываем файл
-    if reset_csv:
+    if should_reset_csv():
         print("📌 Новый месяц! Удаляем старые обзоры...")
         os.remove(OUTPUT_CSV) if os.path.exists(OUTPUT_CSV) else None
+        file_exists = False
 
     with open(OUTPUT_CSV, "a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
 
         # Если файл создаётся заново, пишем заголовки
-        if reset_csv or os.stat(OUTPUT_CSV).st_size == 0:
+        if not file_exists:
             writer.writerow(["id", "date", "title", "review", "mark", "model"])
 
         # Получаем текущее количество записей в файле
         existing_reviews = []
-        if not reset_csv and os.path.exists(OUTPUT_CSV):
+        if os.path.exists(OUTPUT_CSV):
             with open(OUTPUT_CSV, "r", encoding="utf-8") as existing_file:
                 reader = csv.reader(existing_file)
                 existing_reviews = list(reader)
 
-        last_id = int(existing_reviews[-1][0]) if len(existing_reviews) > 1 else 0  # Последний ID
+        last_id = int(existing_reviews[-1][0]) if len(existing_reviews) > 1 else 0
 
-        # Записываем данные в файл
-        for i, (title, review, mark, model) in enumerate(review_data, start=last_id + 1):
-            writer.writerow([i, datetime.datetime.now().strftime("%Y-%m-%d"), title, review, mark, model])
+        # Добавляем запись в CSV
+        review_data.insert(0, last_id + 1)  # Добавляем ID
+        writer.writerow(review_data)
 
-    # ✅ Гарантируем, что файл изменён для GitHub Actions
-    with open(OUTPUT_CSV, "a", encoding="utf-8") as f:
-        f.write("\n")
+    print(f"✅ Записано в CSV: {review_data[2]}")
 
-    print(f"✅ Файл обновлён: {OUTPUT_CSV}")
-
-# ✅ Основной процесс
+# ✅ Основной процесс (многопоточный)
 def main():
     car_models = load_car_models()
     if not car_models:
         print("⚠ Нет моделей автомобилей для генерации.")
         return
 
-    reviews = []
-    for model in car_models:
-        print(f"🔄 Генерация обзора: {model}...")
+    with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+        future_to_model = {executor.submit(generate_full_review, f"{mark} {model}"): (mark, model) for mark, model in car_models}
 
-        # Разделяем марку и модель (если указаны через пробел)
-        parts = model.split(" ", 1)
-        mark = parts[0] if len(parts) > 1 else model
-        model_name = parts[1] if len(parts) > 1 else ""
-
-        review = generate_full_review(model)
-
-        if review:
-            clean_review = clean_text(review)
-            reviews.append((f"Плюсы и минусы {model}", clean_review, mark, model_name))
-            save_to_csv([(f"Плюсы и минусы {model}", clean_review, mark, model_name)])
-
-        time.sleep(10)  # Задержка между запросами
+        for future in as_completed(future_to_model):
+            mark, model = future_to_model[future]
+            try:
+                review = future.result()
+                if review:
+                    clean_review = clean_text(review)
+                    title = f"Обзор {mark} {model}: плюсы и минусы"
+                    date = datetime.datetime.now().strftime("%Y-%m-%d")
+                    
+                    # Сохраняем в CSV в реальном времени
+                    save_review_to_csv([date, title, clean_review, mark, model])
+            except Exception as e:
+                print(f"❌ Ошибка обработки {mark} {model}: {e}")
 
 if __name__ == "__main__":
     main()
