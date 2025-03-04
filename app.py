@@ -83,37 +83,44 @@ def should_reset_csv():
     return last_modified.month != current_date.month  # Если месяц изменился — перезаписываем файл
 
 # ✅ Функция сохранения обзоров в CSV (запись в реальном времени)
-def save_to_csv(title, review, mark, model):
-    reset_csv = should_reset_csv()
-
-    # Если новый месяц — перезаписываем файл
-    if reset_csv:
-        print("📌 Новый месяц! Удаляем старые обзоры...")
-        os.remove(OUTPUT_CSV) if os.path.exists(OUTPUT_CSV) else None
-
-    # Определяем, нужно ли записывать заголовки
-    write_headers = not os.path.exists(OUTPUT_CSV) or os.stat(OUTPUT_CSV).st_size == 0
+def save_to_csv(reviews):
+    file_exists = os.path.exists(OUTPUT_CSV)
+    
+    # Проверяем, есть ли заголовки в файле
+    headers_needed = True
+    if file_exists:
+        with open(OUTPUT_CSV, "r", encoding="utf-8") as file:
+            first_line = file.readline().strip()
+            expected_headers = "id,date,title,review,mark,model"
+            if first_line == expected_headers:
+                headers_needed = False  # Заголовки уже есть
 
     with open(OUTPUT_CSV, "a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
 
-        # Если файл создаётся заново, пишем заголовки
-        if write_headers:
+        # **Добавляем заголовки, если их нет**
+        if headers_needed:
             writer.writerow(["id", "date", "title", "review", "mark", "model"])
+            print("📌 Заголовки добавлены в CSV.")
 
-        # Определяем следующий id
+        # **Определяем последний ID**
         existing_reviews = []
-        if os.path.exists(OUTPUT_CSV):
+        if file_exists:
             with open(OUTPUT_CSV, "r", encoding="utf-8") as existing_file:
                 reader = csv.reader(existing_file)
                 existing_reviews = list(reader)
 
-        last_id = int(existing_reviews[-1][0]) if len(existing_reviews) > 1 else 0
+        last_id = int(existing_reviews[-1][0]) if len(existing_reviews) > 1 else 0  # Последний ID
 
-        # Записываем новую строку
-        writer.writerow([last_id + 1, datetime.datetime.now().strftime("%Y-%m-%d"), title, review, mark, model])
+        # **Добавляем новые обзоры**
+        for i, (title, review, mark, model) in enumerate(reviews, start=last_id + 1):
+            writer.writerow([i, datetime.datetime.now().strftime("%Y-%m-%d"), title, review, mark, model])
 
-    print(f"✅ [{mark} {model}] Данные записаны в {OUTPUT_CSV}")
+    # **Принудительно обновляем файл для GitHub Actions**
+    with open(OUTPUT_CSV, "a", encoding="utf-8") as f:
+        f.write("\n")
+
+    print(f"✅ Файл обновлён: {OUTPUT_CSV}")
 
 # ✅ Основной процесс
 def main():
