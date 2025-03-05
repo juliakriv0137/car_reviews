@@ -1,30 +1,103 @@
-CHERY Fulwin A8
-Jetta VS7
-FAW Bestune B70
-EXEED Sterra ET
-JAC S4
-Jetta VS5
-Maxus MIFA 5
-OMODA E5
-Geely GC9
-Dayun Yuehu
-Seres M7
-Seres M5
-CHERY Tiggo 7
-Lynk & Co 7
-CHERY Fulwin T9
-Maxus EUNIQ 5
-EXEED TXL
-Haval H9
-BYD Yuan
-Baojun Yep Plus
-Haval H2s
-Forthing T5
-LiXiang L6
-Zotye T300
-Geely Binrui Cool
-Dongfeng Aeolus Yixuan
-Dongfeng Aeolus Yixuan Max
-Changan UNI-Z
-BYD E3
-BYD Yuan Up
+BYD E2
+Geely Panda
+Haval H3
+Hongqi EH7
+Changan Hunter
+JAC T9
+BAW Ace M7
+BAW Calorie F7
+BAIC X7
+Jetour X90 PRO
+Kawei K1
+JMEV EV3
+LiXiang L9
+LiXiang L8
+LiXiang L7
+Maxus EUNIQ 6
+Jinbei Haise S
+Tank 700
+BAIC X75
+CHERY Tiggo 4 Pro
+Zeekr 1
+BYD Yangwang U9
+Ciimo (Dongfeng-Honda) M-NV
+Yipai 7
+Geely Okavango
+Wey 5
+Livan 9
+Livan 7
+BAW Yuanbao
+Haval Jolion
+Jaecoo J8
+Hanteng X7
+Kawei K150GT
+Jetour T2
+BAIC BJ40
+Baojun Yep
+LiXiang Mega
+Nevo Q05
+Nevo A05
+Forthing T5L
+Dongfeng Shine
+JAC Refine RF8
+iCar 3
+Geely Galaxy E8
+Haval DaGou (Big Dog)
+Xpeng X9
+Aito M9
+Geely Emgrand
+Luxeed S7
+EXEED Sterra ES
+Wey VV5
+Huazi Omega
+Aiways U5
+ZX Grand Tiger
+Leapmotor C10
+Jetour X70 PRO
+Jetour X70 PLUS
+Foton Mars 7
+Foton Mars 9
+Roewe D7
+ZX Terralord
+JAC T8
+Venucia D60 Plus
+Voyah Passion
+Wey Coffee 01
+ZX Grandlion
+GAC Trumpchi E8
+Wuling Hongguang V
+Dongfeng DFSK ix7
+Dongfeng DFSK ix5
+Forthing CM7
+Zeekr 7
+Leapmotor S01
+Dongfeng Sky EV01
+M-Hero I
+Wuling Xingguang
+Kaiyi X7 Kunlun
+Oting Paladin
+Changan CS75
+BAIC BJ212
+Geely Geometry G6
+JAC S3
+Geely Atlas
+CHERY Tiggo 8 Pro Plug-in Hybrid
+Maxus MIFA 7
+Maxus G70
+Wey VV7
+Baojun Yunduo
+HuangHai N1
+Jetour Shanhai L9
+Dongfeng Paladin
+Wuling Binguo
+Geely Yuancheng (Farizon) FX
+Avatr 12
+CHERY Tiggo 7 Pro Plug-in Hybrid
+Wey Mocca
+GAC Trumpchi GM8
+Venucia VX6
+Wey Gaoshan (High Mountain)
+FAW Bestune T90
+VGV VX7
+BYD Song Pro
+JMC Dadao
