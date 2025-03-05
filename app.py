@@ -16,7 +16,7 @@ MODEL_NAME = "sonar-reasoning-pro"
 CAR_MODELS_FILE = "car_models.txt"
 OUTPUT_CSV = "car_reviews.csv"
 
-# ✅ Функция для генерации обзора (с 3 попытками)
+# ✅ Функция для генерации обзора (с 3 попытками и ограничением по времени)
 def generate_full_review(query):
     url = "https://api.perplexity.ai/chat/completions"
     headers = {
@@ -38,6 +38,8 @@ def generate_full_review(query):
     for attempt in range(1, attempts + 1):
         try:
             print(f"🔄 [{query}] Попытка {attempt}/{attempts} отправки запроса...")
+
+            # Добавляем тайм-аут 60 секунд
             response = requests.post(url, headers=headers, json=payload, timeout=60)
 
             if response.status_code == 200:
@@ -45,6 +47,10 @@ def generate_full_review(query):
                 return response.json()["choices"][0]["message"]["content"]
             else:
                 print(f"❌ [{query}] Ошибка {response.status_code}: {response.text}")
+
+        except requests.exceptions.Timeout:
+            print(f"⏳ [{query}] Тайм-аут! Сервер не ответил за 60 секунд. Пропускаем...")
+            return f"Ошибка генерации обзора для {query} - Тайм-аут API"
 
         except requests.exceptions.RequestException as e:
             print(f"⚠ [{query}] Ошибка соединения: {e}")
@@ -109,7 +115,7 @@ def save_to_csv(title, review, mark, model):
 
     print(f"✅ [{mark} {model}] Данные записаны в {OUTPUT_CSV}")
 
-# ✅ Основной процесс
+# ✅ Основной процесс (последовательная обработка по 1 модели)
 def main():
     car_models = load_car_models()
     if not car_models:
@@ -136,7 +142,7 @@ def main():
         else:
             print(f"❌ Ошибка при генерации обзора для {model}")
 
-        time.sleep(10)  # Задержка между запросами
+        time.sleep(5)  # Уменьшаем задержку перед следующим запросом
 
 if __name__ == "__main__":
     main()
