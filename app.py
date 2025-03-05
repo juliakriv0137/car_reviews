@@ -6,17 +6,20 @@ import time
 import datetime
 import os
 
-# ✅ API-ключ Perplexity AI
+# ✅ API-ключ Perplexity
 PERPLEXITY_API_KEY = "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"
 
-# ✅ Выбираем модель Perplexity AI
-MODEL_NAME = "sonar-reasoning-pro"
+# ✅ Модель Perplexity
+MODEL_NAME = "sonar-small-chat"
 
 # ✅ Пути к файлам
 CAR_MODELS_FILE = "car_models.txt"
 OUTPUT_CSV = "car_reviews.csv"
 
-# ✅ Функция для генерации обзора (с 3 попытками и тайм-аутом 30 секунд)
+# ✅ Список пропущенных машин
+skipped_models = []
+
+# ✅ Функция для генерации обзора (1 попытка, без повторов)
 def generate_full_review(query):
     url = "https://api.perplexity.ai/chat/completions"
     headers = {
@@ -34,118 +37,112 @@ def generate_full_review(query):
         "top_p": 0.9
     }
 
-    attempts = 3  # Количество попыток
-    for attempt in range(1, attempts + 1):
-        try:
-            print(f"🔄 [{query}] Попытка {attempt}/{attempts} отправки запроса...")
+    print(f"📡 [{query}] Отправка запроса в API...")
+    
+    try:
+        response = requests.post(url, headers=headers, json=payload, timeout=60)
 
-            # Ограничение по времени: 30 секунд
-            response = requests.post(url, headers=headers, json=payload, timeout=30)
+        if response.status_code == 200:
+            print(f"✅ [{query}] Ответ от API получен!")
+            return response.json()["choices"][0]["message"]["content"]
+        else:
+            print(f"❌ [{query}] Ошибка {response.status_code}: {response.text}")
+            return None
 
-            if response.status_code == 200:
-                print(f"✅ [{query}] Обзор успешно получен!")
-                return response.json()["choices"][0]["message"]["content"]
-            else:
-                print(f"❌ [{query}] Ошибка {response.status_code}: {response.text}")
+    except requests.exceptions.Timeout:
+        print(f"⏳ [{query}] Тайм-аут 60 сек! API не ответил. Машина пропущена.")
+        skipped_models.append(query)  # Добавляем в список пропущенных
+        return None
 
-        except requests.exceptions.Timeout:
-            print(f"⏳ [{query}] Тайм-аут 30 секунд! API не ответил. Пропускаем...")
+    except requests.exceptions.RequestException as e:
+        print(f"⚠ [{query}] Ошибка соединения: {e}")
+        skipped_models.append(query)  # Добавляем в список пропущенных
+        return None
 
-        except requests.exceptions.RequestException as e:
-            print(f"⚠ [{query}] Ошибка соединения: {e}")
+# ✅ Проверяем, есть ли заголовки в файле
+def ensure_csv_headers():
+    if not os.path.exists(OUTPUT_CSV) or os.stat(OUTPUT_CSV).st_size == 0:
+        with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["id", "date", "title", "review", "mark", "model"])
+        print("📌 Заголовки добавлены в CSV.")
 
-        time.sleep(3)  # Уменьшенная задержка перед повторной попыткой
-
-    print(f"⛔ [{query}] Все попытки не удались. Машина пропущена.")
-    return None
-
-# ✅ Функция очистки текста и форматирования
+# ✅ Функция очистки текста
 def clean_text(text):
     text = re.sub(r"\[\d+\]", "", text)  # Убираем ссылки типа [1], [2]
     text = re.sub(r"\*\*", "", text)  # Убираем звездочки **
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)  # Убираем размышления AI
     text = re.sub(r"SEO-ключи:.*$", "", text, flags=re.MULTILINE)  # Убираем блок "SEO-ключи"
 
-    # Убираем лишние символы заголовков и форматируем текст
+    # Убираем заголовочные символы (===, ##, ---)
     text = re.sub(r"^(?:===|#)+\s*", "", text, flags=re.MULTILINE)  # Убираем === и ##
     text = re.sub(r"^-{3,}", "", text, flags=re.MULTILINE)  # Убираем "---"
+    
+    # Логическое форматирование текста
     text = re.sub(r"\n{2,}", "\n\n", text)  # Убираем лишние пустые строки
 
     return text.strip()
 
-# ✅ Функция загрузки списка моделей
-def load_car_models():
-    if not os.path.exists(CAR_MODELS_FILE):
-        print(f"❌ Файл {CAR_MODELS_FILE} не найден.")
-        return []
-    
-    with open(CAR_MODELS_FILE, "r", encoding="utf-8") as file:
-        return [line.strip() for line in file.readlines() if line.strip()]
-
-# ✅ Функция сохранения обзоров в CSV (запись в реальном времени)
+# ✅ Функция сохранения обзоров в CSV
 def save_to_csv(title, review, mark, model):
-    file_exists = os.path.exists(OUTPUT_CSV)
-
-    # Проверяем, есть ли заголовки в файле
-    headers_needed = not file_exists or os.stat(OUTPUT_CSV).st_size == 0
-
+    ensure_csv_headers()
+    
     with open(OUTPUT_CSV, "a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
 
-        # **Добавляем заголовки, если их нет**
-        if headers_needed:
-            writer.writerow(["id", "date", "title", "review", "mark", "model"])
-            print("📌 Заголовки добавлены в CSV.")
-
-        # **Определяем последний ID**
+        # Определяем последний ID
         last_id = 0
-        if file_exists:
-            with open(OUTPUT_CSV, "r", encoding="utf-8") as existing_file:
-                reader = csv.reader(existing_file)
-                existing_reviews = list(reader)
-                if len(existing_reviews) > 1:
-                    try:
-                        last_id = int(existing_reviews[-1][0])
-                    except ValueError:
-                        last_id = 0
+        with open(OUTPUT_CSV, "r", encoding="utf-8") as existing_file:
+            reader = csv.reader(existing_file)
+            existing_reviews = list(reader)
+            if len(existing_reviews) > 1:
+                try:
+                    last_id = int(existing_reviews[-1][0])
+                except ValueError:
+                    last_id = 0
 
-        # **Записываем новую строку**
         writer.writerow([last_id + 1, datetime.datetime.now().strftime("%Y-%m-%d"), title, review, mark, model])
 
-    print(f"✅ [{mark} {model}] Данные записаны в {OUTPUT_CSV}")
+    print(f"✅ [{mark} {model}] Данные записаны в CSV")
 
-# ✅ Основной процесс (последовательная обработка по 1 модели)
+# ✅ Основной процесс (1 машина за раз, без повторов)
 def main():
-    car_models = load_car_models()
+    with open(CAR_MODELS_FILE, "r", encoding="utf-8") as file:
+        car_models = [line.strip() for line in file.readlines() if line.strip()]
+
     if not car_models:
         print("⚠ Нет моделей автомобилей для генерации.")
         return
 
-    total_cars = len(car_models)
-    processed_cars = 0
+    print(f"🔄 Всего машин для обработки: {len(car_models)}")
 
-    # Последовательная обработка машин (по одной за раз)
-    for model in car_models:
-        processed_cars += 1
-        print(f"🔄 [{processed_cars}/{total_cars}] Начинаю обработку модели: {model}")
+    for idx, model in enumerate(car_models, 1):
+        print(f"🚗 [{idx}/{len(car_models)}] Обрабатываю: {model}")
 
-        # Разделяем марку и модель
         parts = model.split(maxsplit=1)
         if len(parts) < 2:
             print(f"⚠ Ошибка в названии: {model}. Пропускаем.")
+            skipped_models.append(model)  # Добавляем в список пропущенных
             continue
         mark, model_name = parts
 
         review = generate_full_review(model)
-
         if review:
             clean_review = clean_text(review)
-            print(f"✅ [{processed_cars}/{total_cars}] Обзор {model} успешно создан!")
             save_to_csv(f"Обзор {model}: плюсы и минусы", clean_review, mark, model_name)
         else:
-            print(f"❌ [{processed_cars}/{total_cars}] Ошибка при генерации обзора для {model}")
+            print(f"❌ [{idx}/{len(car_models)}] Ошибка при генерации обзора.")
+            skipped_models.append(model)  # Добавляем в список пропущенных
 
-        time.sleep(2)  # Уменьшаем задержку перед следующим запросом
+        time.sleep(30)  # **Пауза 30 секунд перед обработкой следующей машины**
+
+    # Выводим список пропущенных машин
+    if skipped_models:
+        print("\n⛔ **Пропущенные машины:**")
+        for car in skipped_models:
+            print(f"🚨 {car}")
+    else:
+        print("\n✅ **Все машины успешно обработаны!**")
 
 if __name__ == "__main__":
     main()
