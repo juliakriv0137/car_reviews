@@ -16,7 +16,7 @@ MODEL_NAME = "sonar-reasoning-pro"
 CAR_MODELS_FILE = "car_models.txt"
 OUTPUT_CSV = "car_reviews.csv"
 
-# ✅ Функция для генерации обзора (с 3 попытками и ограничением по времени)
+# ✅ Функция для генерации обзора (с 3 попытками и тайм-аутом 30 секунд)
 def generate_full_review(query):
     url = "https://api.perplexity.ai/chat/completions"
     headers = {
@@ -39,8 +39,8 @@ def generate_full_review(query):
         try:
             print(f"🔄 [{query}] Попытка {attempt}/{attempts} отправки запроса...")
 
-            # Добавляем тайм-аут 60 секунд
-            response = requests.post(url, headers=headers, json=payload, timeout=60)
+            # Ограничение по времени: 30 секунд
+            response = requests.post(url, headers=headers, json=payload, timeout=30)
 
             if response.status_code == 200:
                 print(f"✅ [{query}] Обзор успешно получен!")
@@ -49,16 +49,15 @@ def generate_full_review(query):
                 print(f"❌ [{query}] Ошибка {response.status_code}: {response.text}")
 
         except requests.exceptions.Timeout:
-            print(f"⏳ [{query}] Тайм-аут! Сервер не ответил за 60 секунд. Пропускаем...")
-            return f"Ошибка генерации обзора для {query} - Тайм-аут API"
+            print(f"⏳ [{query}] Тайм-аут 30 секунд! API не ответил. Пропускаем...")
 
         except requests.exceptions.RequestException as e:
             print(f"⚠ [{query}] Ошибка соединения: {e}")
 
-        time.sleep(5)  # Задержка перед повторной попыткой
+        time.sleep(3)  # Уменьшенная задержка перед повторной попыткой
 
-    print(f"⛔ [{query}] Все попытки не удались.")
-    return f"Ошибка генерации обзора для {query} - API недоступен"
+    print(f"⛔ [{query}] Все попытки не удались. Машина пропущена.")
+    return None
 
 # ✅ Функция очистки текста и форматирования
 def clean_text(text):
@@ -122,9 +121,13 @@ def main():
         print("⚠ Нет моделей автомобилей для генерации.")
         return
 
+    total_cars = len(car_models)
+    processed_cars = 0
+
     # Последовательная обработка машин (по одной за раз)
     for model in car_models:
-        print(f"🔄 Начинаю обработку модели: {model}")
+        processed_cars += 1
+        print(f"🔄 [{processed_cars}/{total_cars}] Начинаю обработку модели: {model}")
 
         # Разделяем марку и модель
         parts = model.split(maxsplit=1)
@@ -137,12 +140,12 @@ def main():
 
         if review:
             clean_review = clean_text(review)
-            print(f"✅ Обзор {model} успешно создан!")
+            print(f"✅ [{processed_cars}/{total_cars}] Обзор {model} успешно создан!")
             save_to_csv(f"Обзор {model}: плюсы и минусы", clean_review, mark, model_name)
         else:
-            print(f"❌ Ошибка при генерации обзора для {model}")
+            print(f"❌ [{processed_cars}/{total_cars}] Ошибка при генерации обзора для {model}")
 
-        time.sleep(5)  # Уменьшаем задержку перед следующим запросом
+        time.sleep(2)  # Уменьшаем задержку перед следующим запросом
 
 if __name__ == "__main__":
     main()
