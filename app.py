@@ -10,7 +10,7 @@ import os
 PERPLEXITY_API_KEY = "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"
 
 # ✅ Модель Perplexity
-MODEL_NAME = "sonar-reasoning"
+MODEL_NAME = "sonar-pro"
 
 # ✅ Пути к файлам
 CAR_MODELS_FILE = "car_models.txt"
