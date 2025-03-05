@@ -30,7 +30,7 @@ def generate_full_review(query):
         "model": MODEL_NAME,
         "messages": [
             {"role": "system", "content": "Ты - автоэксперт"},
-            {"role": "user", "content": f"Напиши все плюсы и минусы автомобиля {query} на основе отзывов пользователей в интернете."}
+            {"role": "user", "content": f"Напиши обзор автомобиля {query} на основе отзывов пользователей в интернете."}
         ],
         "max_tokens": 2000,
         "temperature": 0.5,
