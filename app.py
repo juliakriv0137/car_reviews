@@ -35,7 +35,7 @@ def generate_full_review(query):
     }
 
     attempts = 3  # Количество попыток
-    for attempt in range(1, attempts + 3):
+    for attempt in range(1, attempts + 1):
         try:
             print(f"🔄 [{query}] Попытка {attempt}/{attempts} отправки запроса...")
             response = requests.post(url, headers=headers, json=payload, timeout=60)
@@ -61,11 +61,9 @@ def clean_text(text):
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)  # Убираем размышления AI
     text = re.sub(r"SEO-ключи:.*$", "", text, flags=re.MULTILINE)  # Убираем блок "SEO-ключи"
 
-    # Убираем заголовочные символы (===, ##, ---)
+    # Убираем лишние символы заголовков и форматируем текст
     text = re.sub(r"^(?:===|#)+\s*", "", text, flags=re.MULTILINE)  # Убираем === и ##
     text = re.sub(r"^-{3,}", "", text, flags=re.MULTILINE)  # Убираем "---"
-    
-    # Логическое форматирование текста
     text = re.sub(r"\n{2,}", "\n\n", text)  # Убираем лишние пустые строки
 
     return text.strip()
@@ -84,13 +82,7 @@ def save_to_csv(title, review, mark, model):
     file_exists = os.path.exists(OUTPUT_CSV)
 
     # Проверяем, есть ли заголовки в файле
-    headers_needed = True
-    if file_exists:
-        with open(OUTPUT_CSV, "r", encoding="utf-8") as file:
-            first_line = file.readline().strip()
-            expected_headers = "id,date,title,review,mark,model"
-            if first_line == expected_headers:
-                headers_needed = False  # Заголовки уже есть
+    headers_needed = not file_exists or os.stat(OUTPUT_CSV).st_size == 0
 
     with open(OUTPUT_CSV, "a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
@@ -124,6 +116,7 @@ def main():
         print("⚠ Нет моделей автомобилей для генерации.")
         return
 
+    # Последовательная обработка машин (по одной за раз)
     for model in car_models:
         print(f"🔄 Начинаю обработку модели: {model}")
 
