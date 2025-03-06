@@ -1,80 +1,213 @@
-JAC A5
-FAW Bestune M9
-Hongqi HS7
-Ora 3
-BYD FangChengBao Leopard 5
-JAC JS3
-Changan CS95
-Changan Yida
-Hozon Neta X
-GAC Aion Hyper HT
-Livan S6 Pro
-GAC Aion Hyper SSR
-Livan X6 Pro
-Haval F5
-Wuling Hongguang S
-GAC Aion Hyper GT
-BAIC X3
-Haval Menglong (Raptor)
-XiaoPaoChe (SSC) SC-01
-Hycan 7
-Hycan A06
-Hycan V09
-Jetour X70
-Hycan Z03
-BYD D1
-Nevo A07
-Nio ES6
-Geely Xingyue
-Nio ET5
-JAC Sehol X6
-Tank 400
-Jetour Traveller
-CHERY Tiggo 5x
-Dongfeng EC36
-Dayun Pickup
-Xpeng P7i
-Wey VV6
-GAC Trumpchi GM6
-Lynk & Co 8
-CHERY eQ7
-Geely Haoyue L
-Geely Coolray
-GAC M8
-GAC GS3
-OMODA S5 GT
-JMEV GSE/Yi
-BAIC BJ2030
-Radar RD6
-Dayun Yuanzhi M1
-Venucia V-Online
-Geely Galaxy L6
-Qingling Taga H
-Hongqi HS3
-Wuling Sunshine
-CHERY Tiggo 8 Pro Max
-Geely Emgrand GL
-Dongfeng Aeolus Haohan
-Voyah Free
-Qiantu K50
-Polar Stone (Jishi) 1
-Haval H5
-Ora SAR (Saloon) Mecha Dragon
-Dongfeng Aeolus Haoji
-CHERY Omoda 5
-CHERY Explore 06
-Oshan X5 Plus
-Jonway UFO A380
-Dongfeng Rich 7
-Xpeng G6
-Geely Binrui
-CHERY eQ1
-JMC Vigus Work
-Dongfeng Nano EX1
-Jetour X95
-BYD Seagull
-Dongfeng Fengguang iX7
-Denza N8
-CHERY QQ Ice Cream
-Changan Deepal S7
-Geely Geometry M6
+Geely Galaxy L7
+Hongqi HS5
+Haval M6
+CHERY Arrizo 5 GT
+Jaecoo J7
+JMC Vigus
+Geely Boyue Cool
+Changan UNI-T
+CHERY Arrizo 5 Plus
+BAIC Ruixiang X5
+Enovate (Enoreve) ME5
+Enovate (Enoreve) ME7
+Foton Tunland G7
+HiPhi Y
+Haval H4
+SWM Shineray X30
+Changan CS95PLUS
+Foton Tunland G9
+GAC Aion Y Plus
+Soueast DX8
+Soueast DX7
+Soueast DX5
+Soueast DX3
+Dongfeng Fengon 560
+Roewe Whale
+Changan Benben E-Star
+Geely Xingyue L
+Wuling Star Asta
+Dongfeng Fengon 500
+Wuling Xingchi
+Geely Vision X3 Pro
+Geely Vision X3
+Geely Azkarra
+Geely Binyue
+Forthing Thunder
+Denza N7
+Wuling Jiachen
+Changan Raeton Plus
+Maxus T90
+Baojun RS-5
+Baojun RC-5
+Great Wall Shanhai Poer
+Skyworth EV6
+Aiways U6
+Geely Boyue Pro
+Baojun RS-3
+Rising Auto F7
+Yema T70
+Hozon Neta U-II
+Changan Hunter Plus
+Changan Lumin
+CHERY Tiggo 7 Plus
+Wuling Victory
+BAIC BJ90
+Soueast A5
+Geely Emgrand L
+Changan Eado Plus
+GAC Trumpchi GE3
+BYD E9
+Changan Lamore
+GAC Aion LX
+GAC Aion LX Plus
+GAC Trumpchi E9
+KYC F3
+Haval Xiaolong Max
+Haval Xiaolong
+FAW Bestune T99
+Changfeng Liebao Leopard
+GAC Trumpchi GS3
+Soueast DX8S
+JMC Yuhu 7
+EXEED TX
+Dongfeng Shine Max
+Jetour X90 PLUS
+VGV U70 Pro
+BYD Frigate 07
+Hozon Neta V
+Leapmotor C01
+EXEED RX
+Wuling Mini EV
+Skywell HT-i
+VGV U70
+VGV U75 Plus
+IM Motors (Zhiji) LS7
+BYD Destroyer 05
+CHERY Tiggo 8 Pro e+
+Hozon Neta GT
+Denza D9
+Changan Alsvin
+SWM X3
+Livan X3 Pro
+Forthing M7
+Hongqi H6
+SWM X7
+Changan Kaicene F70
+Nio ES7
+Forthing Yacht
+BYD Yangwang U8
+Haval Shenshou
+EXEED VX
+SWM G05 Pro
+SWM G05
+SWM G01
+CHERY Tiggo 8 Pro
+SWM G01F
+SWM Tiger
+Zeekr X
+Geely Icon
+IM Motors (Zhiji) L7
+BAIC X55
+Changan Lantuozhe (Explorer)
+BAIC U5 Plus
+Great Wall Poer King Kong
+Maxus G50
+Geely Geometry E
+Kaiyi X3
+Maxus D90
+Haima E3
+CHERY Arrizo 8
+CHERY Tiggo 3x
+Forthing Lingzhi M5
+Wey Lanshan (Blue Mountain)
+Roewe RX9
+Rising Auto Marvel R
+Forthing T5 EVO
+Roewe Marvel X
+BAIC EX3
+BAIC EU7
+Hongqi H9
+BAIC X5
+Roewe Clever
+Nio ES8
+Nio EC7
+Rising Auto R7
+GAC iA5
+BAIC U5
+EXEED Yaoguang
+Dongfeng Aeolus Yixuan GS
+Haima Aishang EV
+Haima 7X
+Haima 6P
+Haima S5 Young
+Haima S5
+Maxus G90
+Maxus G20
+Avatr 11
+Changan Eado
+Geely Vision X6 Pro
+Geely Vision X6
+Maxus D60
+Maxus MIFA 9
+Maxus Territory
+BYD Seal
+Ora Black Cat
+Ora White Cat
+Ora Lightning Cat
+Ora Ballet Cat
+Haval Dargo
+Ora Good Cat
+Hongqi HQ9
+Hongqi H7
+Hongqi LS7
+Hongqi E-HS3
+Geely Jiaji
+Hongqi E-QM5
+Jetour X90
+OMODA S5
+Wey Latte
+FAW Bestune B70S
+JAC Sehol X8 Plus
+JAC Sehol X8
+Geely Binyue Cool
+Lynk & Co 9
+Dongfeng AX4
+Haval Chitu
+Lynk & Co 5
+Lynk & Co 3
+Jetta VA3
+Lynk & Co 2
+JAC T8 Pro
+Lynk & Co 1
+Seres SF5
+GAC Trumpchi Emkoo
+GAC Trumpchi Empow
+GAC Trumpchi M6
+GAC Trumpchi M6 Pro
+GAC Trumpchi GS4
+Hafei Minyi
+Haval KuGou
+GAC Trumpchi GS4 Plus
+GAC Trumpchi GS3 Power
+GAC Trumpchi GA8
+Haval H6 Coupe
+GAC Trumpchi GA4 Plus
+Weltmeister EX6 Plus
+HiPhi Z
+Xpeng G9
+GAC Trumpchi GA6
+Kaiyi X3 Pro
+Baojun Kiwi EV
+Baojun E300
+BAIC X35
+GAC Trumpchi M8
+Aito M5
+BAIC EU5
+Changan CS35PLUS
+Oshan X5
+Oshan X7 Plus
+Oshan Z6
+BAIC U7
+Oshan X7
+BAIC BJ80
+Haval H6S
