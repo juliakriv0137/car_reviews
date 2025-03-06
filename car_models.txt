@@ -1,103 +1,80 @@
-BYD E2
-Geely Panda
-Haval H3
-Hongqi EH7
-Changan Hunter
-JAC T9
-BAW Ace M7
-BAW Calorie F7
-BAIC X7
-Jetour X90 PRO
-Kawei K1
-JMEV EV3
-LiXiang L9
-LiXiang L8
-LiXiang L7
-Maxus EUNIQ 6
-Jinbei Haise S
-Tank 700
-BAIC X75
-CHERY Tiggo 4 Pro
-Zeekr 1
-BYD Yangwang U9
-Ciimo (Dongfeng-Honda) M-NV
-Yipai 7
-Geely Okavango
-Wey 5
-Livan 9
-Livan 7
-BAW Yuanbao
-Haval Jolion
-Jaecoo J8
-Hanteng X7
-Kawei K150GT
-Jetour T2
-BAIC BJ40
-Baojun Yep
-LiXiang Mega
-Nevo Q05
-Nevo A05
-Forthing T5L
-Dongfeng Shine
-JAC Refine RF8
-iCar 3
-Geely Galaxy E8
-Haval DaGou (Big Dog)
-Xpeng X9
-Aito M9
-Geely Emgrand
-Luxeed S7
-EXEED Sterra ES
-Wey VV5
-Huazi Omega
-Aiways U5
-ZX Grand Tiger
-Leapmotor C10
-Jetour X70 PRO
-Jetour X70 PLUS
-Foton Mars 7
-Foton Mars 9
-Roewe D7
-ZX Terralord
-JAC T8
-Venucia D60 Plus
-Voyah Passion
-Wey Coffee 01
-ZX Grandlion
-GAC Trumpchi E8
-Wuling Hongguang V
-Dongfeng DFSK ix7
-Dongfeng DFSK ix5
-Forthing CM7
-Zeekr 7
-Leapmotor S01
-Dongfeng Sky EV01
-M-Hero I
-Wuling Xingguang
-Kaiyi X7 Kunlun
-Oting Paladin
-Changan CS75
-BAIC BJ212
-Geely Geometry G6
-JAC S3
-Geely Atlas
-CHERY Tiggo 8 Pro Plug-in Hybrid
-Maxus MIFA 7
-Maxus G70
-Wey VV7
-Baojun Yunduo
-HuangHai N1
-Jetour Shanhai L9
-Dongfeng Paladin
-Wuling Binguo
-Geely Yuancheng (Farizon) FX
-Avatr 12
-CHERY Tiggo 7 Pro Plug-in Hybrid
-Wey Mocca
-GAC Trumpchi GM8
-Venucia VX6
-Wey Gaoshan (High Mountain)
-FAW Bestune T90
-VGV VX7
-BYD Song Pro
-JMC Dadao
+JAC A5
+FAW Bestune M9
+Hongqi HS7
+Ora 3
+BYD FangChengBao Leopard 5
+JAC JS3
+Changan CS95
+Changan Yida
+Hozon Neta X
+GAC Aion Hyper HT
+Livan S6 Pro
+GAC Aion Hyper SSR
+Livan X6 Pro
+Haval F5
+Wuling Hongguang S
+GAC Aion Hyper GT
+BAIC X3
+Haval Menglong (Raptor)
+XiaoPaoChe (SSC) SC-01
+Hycan 7
+Hycan A06
+Hycan V09
+Jetour X70
+Hycan Z03
+BYD D1
+Nevo A07
+Nio ES6
+Geely Xingyue
+Nio ET5
+JAC Sehol X6
+Tank 400
+Jetour Traveller
+CHERY Tiggo 5x
+Dongfeng EC36
+Dayun Pickup
+Xpeng P7i
+Wey VV6
+GAC Trumpchi GM6
+Lynk & Co 8
+CHERY eQ7
+Geely Haoyue L
+Geely Coolray
+GAC M8
+GAC GS3
+OMODA S5 GT
+JMEV GSE/Yi
+BAIC BJ2030
+Radar RD6
+Dayun Yuanzhi M1
+Venucia V-Online
+Geely Galaxy L6
+Qingling Taga H
+Hongqi HS3
+Wuling Sunshine
+CHERY Tiggo 8 Pro Max
+Geely Emgrand GL
+Dongfeng Aeolus Haohan
+Voyah Free
+Qiantu K50
+Polar Stone (Jishi) 1
+Haval H5
+Ora SAR (Saloon) Mecha Dragon
+Dongfeng Aeolus Haoji
+CHERY Omoda 5
+CHERY Explore 06
+Oshan X5 Plus
+Jonway UFO A380
+Dongfeng Rich 7
+Xpeng G6
+Geely Binrui
+CHERY eQ1
+JMC Vigus Work
+Dongfeng Nano EX1
+Jetour X95
+BYD Seagull
+Dongfeng Fengguang iX7
+Denza N8
+CHERY QQ Ice Cream
+Changan Deepal S7
+Geely Geometry M6
